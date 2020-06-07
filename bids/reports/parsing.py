@@ -329,15 +329,12 @@ def fmap_info(metadata, img, config, layout):
                 run_dict[ty_str] = []
             run_dict[ty_str].append(run_num)
 
-        for scan in run_dict.keys():
+        for scan in run_dict:
             run_dict[scan] = [num2words(r, ordinal=True) for r in sorted(run_dict[scan])]
 
         out_list = []
-        for scan in run_dict.keys():
-            if len(run_dict[scan]) > 1:
-                s = 's'
-            else:
-                s = ''
+        for scan in run_dict:
+            s = 's' if len(run_dict[scan]) > 1 else ''
             run_str = list_to_str(run_dict[scan])
             string = '{rs} run{s} of the {sc}'.format(rs=run_str,
                                                       s=s,

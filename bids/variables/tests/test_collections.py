@@ -33,23 +33,23 @@ def test_resample_run_variable_collection(run_coll):
 
     resampled = run_coll.resample(force_dense=True)
     assert len(resampled) == 7
-    assert all([isinstance(v, DenseRunVariable) for v in resampled.values()])
-    assert len(set([v.sampling_rate for v in resampled.values()])) == 1
+    assert all(isinstance(v, DenseRunVariable) for v in resampled.values())
+    assert len({v.sampling_rate for v in resampled.values()}) == 1
     targ_len = 480 * 16 * 3 * 10
-    assert all([len(v.values) == targ_len for v in resampled.values()])
+    assert all(len(v.values) == targ_len for v in resampled.values())
 
     sr = 20
     resampled = run_coll.resample(sr, force_dense=True)
     targ_len = 480 * 16 * 3 * sr
-    assert all([len(v.values) == targ_len for v in resampled.values()])
+    assert all(len(v.values) == targ_len for v in resampled.values())
 
     run_coll.resample(sr, force_dense=True, in_place=True)
     assert len(run_coll.variables) == 8
     vars_ = run_coll.variables.values()
     vars_ = [v for v in vars_ if v.name != 'trial_type']
-    assert all([len(v.values) == targ_len for v in vars_])
-    assert all([v.sampling_rate == sr for v in vars_])
-    assert all([isinstance(v, DenseRunVariable) for v in vars_])
+    assert all(len(v.values) == targ_len for v in vars_)
+    assert all(v.sampling_rate == sr for v in vars_)
+    assert all(isinstance(v, DenseRunVariable) for v in vars_)
 
 
 def test_run_variable_collection_to_df(run_coll):

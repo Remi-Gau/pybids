@@ -148,13 +148,12 @@ class Transformation(object):
         pass_thru = list(set(pass_thru))
 
         for name, col in self._variables.items():
-            if name not in pass_thru:
-                if col.values.values.dtype.kind not in 'bifc':
-                    msg = ("The %s transformation does not allow variable '%s'"
-                           " to be categorical. Either pass a different "
-                           "variable or explicitly convert to a set of binary "
-                           "indicators via the 'factor' transformation.")
-                    raise ValueError(msg % (self.__class__.__name__, name))
+            if name not in pass_thru and col.values.values.dtype.kind not in 'bifc':
+                msg = ("The %s transformation does not allow variable '%s'"
+                       " to be categorical. Either pass a different "
+                       "variable or explicitly convert to a set of binary "
+                       "indicators via the 'factor' transformation.")
+                raise ValueError(msg % (self.__class__.__name__, name))
 
     def _densify_variables(self):
 

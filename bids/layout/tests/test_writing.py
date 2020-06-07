@@ -29,7 +29,7 @@ def writable_file(tmpdir):
         'run': 2,
         'subject': '3'
     }
-    ents = {name: Entity(name) for name in tag_dict.keys()}
+    ents = {name: Entity(name) for name in tag_dict}
     tags = [Tag(bf, ents[k], value=v)
             for k, v in tag_dict.items()]
 

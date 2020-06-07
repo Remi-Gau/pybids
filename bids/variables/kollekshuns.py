@@ -45,8 +45,8 @@ class BIDSVariableCollection(object):
             'sessions': 'subject',
             'participants': 'dataset'
         }
-        var_levels = set([SOURCE_TO_LEVEL[v.source] if v.source in
-                          SOURCE_TO_LEVEL else v.source for v in variables])
+        var_levels = {SOURCE_TO_LEVEL[v.source] if v.source in
+                          SOURCE_TO_LEVEL else v.source for v in variables}
 
         # TODO: relax this requirement & allow implicit merging between levels
         if len(var_levels) > 1:
@@ -228,19 +228,16 @@ class BIDSRunVariableCollection(BIDSVariableCollection):
     def __init__(self, variables, sampling_rate=None):
         # Don't put the default value in signature because None is passed from
         # several places and we don't want multiple conflicting defaults.
-        if sampling_rate:
-            if isinstance(sampling_rate, str):
-                raise ValueError("Sampling rate must be numeric.")
+        if sampling_rate and isinstance(sampling_rate, str):
+            raise ValueError("Sampling rate must be numeric.")
         self.sampling_rate = sampling_rate or 10
         super(BIDSRunVariableCollection, self).__init__(variables)
 
     def _none_dense(self):
-        return all([isinstance(v, SimpleVariable)
-                    for v in self.variables.values()])
+        return all(isinstance(v, SimpleVariable) for v in self.variables.values())
 
     def _all_dense(self):
-        return all([isinstance(v, DenseRunVariable)
-                    for v in self.variables.values()])
+        return all(isinstance(v, DenseRunVariable) for v in self.variables.values())
 
     def resample(self, sampling_rate=None, variables=None, force_dense=False,
                  in_place=False, kind='linear'):
@@ -317,7 +314,7 @@ class BIDSRunVariableCollection(BIDSVariableCollection):
         Returns: A pandas DataFrame.
         '''
 
-        if not include_sparse and not include_dense:
+        if not (include_sparse or include_dense):
             raise ValueError("You can't exclude both dense and sparse "
                              "variables! That leaves nothing!")
 
@@ -367,7 +364,7 @@ def merge_collections(collections, force_dense=False, sampling_rate='auto'):
     if len(listify(collections)) == 1:
         return collections
 
-    levels = set([c.level for c in collections])
+    levels = {c.level for c in collections}
     if len(levels) > 1:
         raise ValueError("At the moment, it's only possible to merge "
                          "Collections at the same level of analysis. You "

@@ -136,9 +136,8 @@ def spm_time_derivative(tr, oversampling=50, time_length=32., onset=0.):
           dhrf sampling on the provided grid
     """
     do = .1
-    dhrf = 1. / do * (spm_hrf(tr, oversampling, time_length, onset) -
+    return 1. / do * (spm_hrf(tr, oversampling, time_length, onset) -
                       spm_hrf(tr, oversampling, time_length, onset + do))
-    return dhrf
 
 
 def glover_time_derivative(tr, oversampling=50, time_length=32., onset=0.):
@@ -161,9 +160,8 @@ def glover_time_derivative(tr, oversampling=50, time_length=32., onset=0.):
           dhrf sampling on the provided grid
     """
     do = .1
-    dhrf = 1. / do * (glover_hrf(tr, oversampling, time_length, onset) -
+    return 1. / do * (glover_hrf(tr, oversampling, time_length, onset) -
                       glover_hrf(tr, oversampling, time_length, onset + do))
-    return dhrf
 
 
 def spm_dispersion_derivative(tr, oversampling=50, time_length=32., onset=0.):
@@ -189,11 +187,10 @@ def spm_dispersion_derivative(tr, oversampling=50, time_length=32., onset=0.):
           dhrf sampling on the oversampled time grid
     """
     dd = .01
-    dhrf = 1. / dd * (
+    return 1. / dd * (
         - _gamma_difference_hrf(tr, oversampling, time_length,
                                 onset, dispersion=1. + dd)
         + _gamma_difference_hrf(tr, oversampling, time_length, onset))
-    return dhrf
 
 
 def glover_dispersion_derivative(tr, oversampling=50, time_length=32.,
@@ -220,14 +217,13 @@ def glover_dispersion_derivative(tr, oversampling=50, time_length=32.,
           dhrf sampling on the oversampled time grid
     """
     dd = .01
-    dhrf = 1. / dd * (
+    return 1. / dd * (
         - _gamma_difference_hrf(
             tr, oversampling, time_length, onset,
             delay=6, undershoot=12., dispersion=.9 + dd, ratio=.35)
         + _gamma_difference_hrf(
             tr, oversampling, time_length, onset, delay=6, undershoot=12.,
             dispersion=.9, ratio=.35))
-    return dhrf
 
 
 def _sample_condition(exp_condition, frame_times, oversampling=50,

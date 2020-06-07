@@ -126,7 +126,7 @@ class BIDSVariable(object):
         if len(variables) == 1:
             return variables[0]
 
-        var_names = set([v.name for v in variables])
+        var_names = {v.name for v in variables}
         if len(var_names) > 1:
             raise ValueError("Columns with different names cannot be merged. "
                              "Column names provided: %s" % var_names)
@@ -310,7 +310,7 @@ class SparseRunVariable(SimpleVariable):
 
     def get_duration(self):
         ''' Return the total duration of the Variable's run(s). '''
-        return sum([r.duration for r in self.run_info])
+        return sum(r.duration for r in self.run_info)
 
     def to_dense(self, sampling_rate):
         ''' Convert the current sparse column to a dense representation.
@@ -498,7 +498,7 @@ class DenseRunVariable(BIDSVariable):
     def _merge(cls, variables, name, sampling_rate=None, **kwargs):
 
         if not isinstance(sampling_rate, int):
-            rates = set([v.sampling_rate for v in variables])
+            rates = {v.sampling_rate for v in variables}
             if len(rates) == 1:
                 sampling_rate = list(rates)[0]
             else:
@@ -554,12 +554,12 @@ def merge_variables(variables, name=None, **kwargs):
       possible to merge two different variables into a single variable.)
     '''
 
-    classes = set([v.__class__ for v in variables])
+    classes = {v.__class__ for v in variables}
     if len(classes) > 1:
         raise ValueError("Variables of different classes cannot be merged. "
                          "Variables passed are of classes: %s" % classes)
 
-    sources = set([v.source for v in variables])
+    sources = {v.source for v in variables}
     if len(sources) > 1:
         raise ValueError("Variables extracted from different types of files "
                          "cannot be merged. Sources found: %s" % sources)

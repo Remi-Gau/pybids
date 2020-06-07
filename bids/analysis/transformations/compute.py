@@ -99,8 +99,7 @@ class Orthogonalize(Transformation):
         y = var.values
         _aX = np.c_[np.ones(len(y)), X]
         coefs, resids, rank, s = np.linalg.lstsq(_aX, y)
-        result = pd.DataFrame(y - X.dot(coefs[1:]), index=var.index)
-        return result
+        return pd.DataFrame(y - X.dot(coefs[1:]), index=var.index)
 
 
 class Product(Transformation):

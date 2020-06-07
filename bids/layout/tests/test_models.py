@@ -111,7 +111,7 @@ def test_tag_dtype(sample_bidsfile, subject_entity):
         Tag(f, e, 4),
         Tag(file=f, entity=e, dtype=int, value='4')
     ]
-    assert all([t.dtype == int for t in tags])
+    assert all(t.dtype == int for t in tags)
 
 
 def test_entity_add_file(sample_bidsfile):
@@ -140,7 +140,7 @@ def test_config_init_with_args():
     config = Config('custom', entities=ents, default_path_patterns=patterns)
     assert config.name == 'custom'
     target = {'task', 'acquisition'}
-    assert set(ent.name for ent in config.entities.values()) == target
+    assert {ent.name for ent in config.entities.values()} == target
     assert config.default_path_patterns  == patterns
 
 
@@ -228,7 +228,7 @@ def test_bidsfile_get_entities(layout_synthetic):
     # metadata=False and values='obj'
     md = bf.get_entities(metadata=False, values='objects')
     assert set(md.keys()) == file_ents
-    assert all([isinstance(v, Entity) for v in md.values()])
+    assert all(isinstance(v, Entity) for v in md.values())
     # No metadata constraint
     md = bf.get_entities(metadata='all')
     md2 = bf.get_entities(metadata=None)

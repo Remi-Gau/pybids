@@ -10,15 +10,13 @@ from bids.tests import get_test_data_path
 @pytest.fixture(scope="module")
 def layout1():
     path = join(get_test_data_path(), 'ds005')
-    layout = BIDSLayout(path)
-    return layout
+    return BIDSLayout(path)
 
 
 @pytest.fixture(scope="module")
 def layout2():
     path = join(get_test_data_path(), '7t_trt')
-    layout = BIDSLayout(path)
-    return layout
+    return BIDSLayout(path)
 
 
 def test_run(layout1):
@@ -55,10 +53,10 @@ def test_get_nodes(layout1):
     assert len(nodes) == 0
     nodes = index.get_nodes('dataset')
     assert len(nodes) == 1
-    assert all([isinstance(n, Node) for n in nodes])
+    assert all(isinstance(n, Node) for n in nodes)
     nodes = index.get_nodes('run', {'subject': ['01', '02', '03']})
     assert len(nodes) == 9
-    assert all([isinstance(n, RunNode) for n in nodes])
+    assert all(isinstance(n, RunNode) for n in nodes)
 
 
 def test_get_collections_merged(layout1):

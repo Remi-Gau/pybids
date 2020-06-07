@@ -328,10 +328,12 @@ def test_factor(collection):
     # full-rank dummy-coding, multiple values
     coll = collection.clone()
     transform.Factor(coll, 'respnum')
-    targets = set(['respnum.%d' % d for d in range(0, 5)])
+    targets = {'respnum.%d' % d for d in range(5)}
     assert not targets - set(coll.variables.keys())
-    assert all([set(coll.variables[t].values.unique()) == {0.0, 1.0}
-                for t in targets])
+    assert all(
+        set(coll.variables[t].values.unique()) == {0.0, 1.0} for t in targets
+    )
+
     data = pd.concat([coll.variables[t].values for t in targets],
                      axis=1, sort=True)
     assert (data.sum(1) == 1).all()
@@ -339,11 +341,13 @@ def test_factor(collection):
     # reduced-rank dummy-coding, multiple values
     coll = collection.clone()
     transform.Factor(coll, 'respnum', constraint='drop_one')
-    targets = set(['respnum.%d' % d for d in range(1, 5)])
+    targets = {'respnum.%d' % d for d in range(1, 5)}
     assert not targets - set(coll.variables.keys())
     assert 'respnum.0' not in coll.variables.keys()
-    assert all([set(coll.variables[t].values.unique()) == {0.0, 1.0}
-                for t in targets])
+    assert all(
+        set(coll.variables[t].values.unique()) == {0.0, 1.0} for t in targets
+    )
+
     data = pd.concat([coll.variables[t].values for t in targets],
                      axis=1, sort=True)
     assert set(np.unique(data.sum(1).values.ravel())) == {0., 1.}
@@ -351,11 +355,14 @@ def test_factor(collection):
     # Effect coding, multiple values
     coll = collection.clone()
     transform.Factor(coll, 'respnum', constraint='mean_zero')
-    targets = set(['respnum.%d' % d for d in range(1, 5)])
+    targets = {'respnum.%d' % d for d in range(1, 5)}
     assert not targets - set(coll.variables.keys())
     assert 'respnum.0' not in coll.variables.keys()
-    assert all([set(coll.variables[t].values.unique()) == {-0.25, 0.0, 1.0}
-                for t in targets])
+    assert all(
+        set(coll.variables[t].values.unique()) == {-0.25, 0.0, 1.0}
+        for t in targets
+    )
+
     data = pd.concat([coll.variables[t].values for t in targets],
                      axis=1, sort=True)
     assert set(np.unique(data.sum(1).values.ravel())) == {-1., 1.}
@@ -412,7 +419,7 @@ def test_delete(collection):
 def test_and(collection):
     coll = collection.clone()
     transform.Factor(coll, 'respnum')
-    names = ['respnum.%d' % d for d in range(0, 5)]
+    names = ['respnum.%d' % d for d in range(5)]
     transform.And(coll, names, output='conjunction')
     assert not coll.variables['conjunction'].values.sum()
 
@@ -425,7 +432,7 @@ def test_and(collection):
 def test_or(collection):
     coll = collection.clone()
     transform.Factor(coll, 'respnum')
-    names = ['respnum.%d' % d for d in range(0, 5)]
+    names = ['respnum.%d' % d for d in range(5)]
     transform.Or(coll, names, output='disjunction')
     assert (coll.variables['disjunction'].values == 1).all()
 

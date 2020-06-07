@@ -55,8 +55,8 @@ def reset_options(update_from_file=False):
             standard locations.
     '''
     global _settings
-    _settings = _default_settings.copy()
     if update_from_file:
+        _settings = _default_settings.copy()
         _update_from_standard_locations()
 
 

@@ -29,8 +29,7 @@ def testconfig():
 
 @pytest.fixture
 def testmeta():
-    metadata = {'RepetitionTime': 2.}
-    return metadata
+    return {'RepetitionTime': 2.}
 
 
 def test_parsing_anat(testmeta, testconfig):

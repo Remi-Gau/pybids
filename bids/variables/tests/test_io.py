@@ -11,8 +11,7 @@ from bids.config import set_option, get_option
 @pytest.fixture
 def layout1():
     path = join(get_test_data_path(), 'ds005')
-    layout = BIDSLayout(path)
-    return layout
+    return BIDSLayout(path)
 
 
 @pytest.fixture(scope="module", params=["events", "preproc"])
@@ -82,9 +81,12 @@ def test_load_synthetic_dataset(synthetic):
     for v in match:
         assert v in variables.keys()
 
-    assert sum([isinstance(v, DenseRunVariable)
-                for v in variables.values()]) == sum_dense
-    assert all([len(r.variables['weight'].values) == 42 for r in runs])
+    assert (
+        sum(isinstance(v, DenseRunVariable) for v in variables.values())
+        == sum_dense
+    )
+
+    assert all(len(r.variables['weight'].values) == 42 for r in runs)
 
     # Sessions
     sessions = index.get_nodes('session')

@@ -31,8 +31,7 @@ class Analysis(object):
         self._load_model(model)
 
     def __iter__(self):
-        for b in self.steps:
-            yield b
+        yield from self.steps
 
     def __getitem__(self, index):
         if isinstance(index, int):

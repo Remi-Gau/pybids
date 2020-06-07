@@ -137,30 +137,29 @@ def write_contents_to_file(path, contents=None, link_to=None,
         path = join(root, path)
 
     if exists(path) or islink(path):
-        if conflicts == 'fail':
+        if conflicts == 'append':
+            i = 1
+            while i < sys.maxsize:
+                path_splits = splitext(path)
+                path_splits[0] = path_splits[0] + '_%d' % i
+                appended_filename = os.extsep.join(path_splits)
+                if not (exists(appended_filename) or islink(appended_filename)):
+                    path = appended_filename
+                    break
+                i += 1
+        elif conflicts == 'fail':
             msg = 'A file at path {} already exists.'
             raise ValueError(msg.format(path))
-        elif conflicts == 'skip':
-            msg = 'A file at path {} already exists, skipping writing file.'
-            warnings.warn(msg.format(path))
-            return
         elif conflicts == 'overwrite':
             if isdir(path):
                 warnings.warn('New path is a directory, not going to '
                              'overwrite it, skipping instead.')
                 return
             os.remove(path)
-        elif conflicts == 'append':
-            i = 1
-            while i < sys.maxsize:
-                path_splits = splitext(path)
-                path_splits[0] = path_splits[0] + '_%d' % i
-                appended_filename = os.extsep.join(path_splits)
-                if not exists(appended_filename) and \
-                   not islink(appended_filename):
-                    path = appended_filename
-                    break
-                i += 1
+        elif conflicts == 'skip':
+            msg = 'A file at path {} already exists, skipping writing file.'
+            warnings.warn(msg.format(path))
+            return
         else:
             raise ValueError('Did not provide a valid conflicts parameter')
 

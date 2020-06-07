@@ -27,15 +27,13 @@ def generate_DEV(name='test', sr=20, duration=480):
 @pytest.fixture
 def layout1():
     path = join(get_test_data_path(), 'ds005')
-    layout = BIDSLayout(path)
-    return layout
+    return BIDSLayout(path)
 
 
 @pytest.fixture(scope="module")
 def layout2():
     path = join(get_test_data_path(), '7t_trt')
-    layout = BIDSLayout(path)
-    return layout
+    return BIDSLayout(path)
 
 
 def test_dense_event_variable_init():
@@ -121,7 +119,7 @@ def test_merge_simple_variables(layout2):
     index = load_variables(layout2, types='sessions')
     subjects = index.get_nodes('subject')
     variables = [s.variables['panas_sad'] for s in subjects]
-    n_rows = sum([len(c.values) for c in variables])
+    n_rows = sum(len(c.values) for c in variables)
     merged = merge_variables(variables)
     assert len(merged.values) == n_rows
     assert set(merged.index.columns) == set(variables[0].index.columns)
@@ -132,7 +130,7 @@ def test_merge_sparse_run_variables(layout1):
     dataset = load_variables(layout1, types='events', scan_length=480)
     runs = dataset.get_nodes('run')
     variables = [r.variables['RT'] for r in runs]
-    n_rows = sum([len(c.values) for c in variables])
+    n_rows = sum(len(c.values) for c in variables)
     merged = merge_variables(variables)
     assert len(merged.values) == n_rows
     assert set(merged.index.columns) == set(variables[0].index.columns)
@@ -141,7 +139,7 @@ def test_merge_sparse_run_variables(layout1):
 def test_merge_dense_run_variables(layout2):
     variables = [generate_DEV() for i in range(20)]
     variables += [generate_DEV(duration=400) for i in range(8)]
-    n_rows = sum([len(c.values) for c in variables])
+    n_rows = sum(len(c.values) for c in variables)
     merged = merge_variables(variables)
     assert len(merged.values) == n_rows
     assert set(merged.index.columns) == set(variables[0].index.columns)

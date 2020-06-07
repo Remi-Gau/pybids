@@ -724,11 +724,7 @@ class BIDSLayout(object):
 
             results = [x for x in results if target in x.entities]
 
-            if return_type == 'id':
-                results = list(set([x.entities[target] for x in results]))
-                results = natural_sort(results)
-
-            elif return_type == 'dir':
+            if return_type == 'dir':
                 template = entities[target].directory
                 if template is None:
                     raise ValueError('Return type set to directory, but no '
@@ -748,6 +744,10 @@ class BIDSLayout(object):
                 ]
 
                 results = natural_sort(list(set(matches)))
+
+            elif return_type == 'id':
+                results = list({x.entities[target] for x in results})
+                results = natural_sort(results)
 
             else:
                 raise ValueError("Invalid return_type specified (must be one "
@@ -984,7 +984,7 @@ class BIDSLayout(object):
             f_ents = f.entities
             keys = set(entities.keys()) & set(f_ents.keys())
             shared = len(keys)
-            return [shared, sum([entities[k] == f_ents[k] for k in keys])]
+            return [shared, sum(entities[k] == f_ents[k] for k in keys)]
 
         matches = []
 
@@ -1050,7 +1050,7 @@ class BIDSLayout(object):
             metadata = self.get_metadata(file.path)
             if metadata and "IntendedFor" in metadata.keys():
                 intended_for = listify(metadata["IntendedFor"])
-                if any([path.endswith(_suff) for _suff in intended_for]):
+                if any(path.endswith(_suff) for _suff in intended_for):
                     cur_fieldmap = {}
                     if file.entities['suffix'] == "phasediff":
                         cur_fieldmap = {"phasediff": file.path,
