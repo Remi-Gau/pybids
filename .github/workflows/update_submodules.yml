@@ -59,7 +59,7 @@ defaults:
 jobs:
   update_submodules:
     # only trigger update on upstream repo
-    if: github.repository_owner == 'bids-standard'
+    if: github.repository_owner == 'Remi-Gau'
 
     runs-on: ubuntu-latest
 
