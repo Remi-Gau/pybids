@@ -1,3 +1,1 @@
-from .report import BIDSReport
-
-__all__ = ["BIDSReport"]
+from bids.ext.reports import *
