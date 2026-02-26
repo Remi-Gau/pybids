@@ -61,6 +61,14 @@ def test_layout_on_examples_with_derivatives(dataset, nb_files, bids_examples):
         ("mrs_fmrs", 169),
         ("mrs_biggaba", 172),
         ("mrs_2dmrsi", 67),
+ ("emg_ConcurrentIndependentUnits", 18),
+ ("emg_CustomBipolar", 7),
+ ("emg_CustomBipolarFace", 11),
+ ("emg_IndependentMod", 7),
+ ("emg_MultiBodyParts", 10),
+ ("emg_Multimodal", 21),
+ ("emg_TwoHDsEMG", 12),
+ ("emg_TwoWristbands", 10),
     ],
 )
 def test_layout_on_examples_no_derivatives(dataset, nb_files, bids_examples):
