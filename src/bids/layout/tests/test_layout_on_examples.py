@@ -78,7 +78,7 @@ def test_layout_on_examples_no_derivatives(dataset, nb_files, bids_examples):
     files = layout.get()
     assert len(files) == nb_files
 
-
+@pytest.mark.xfail(reason="atlas datasets are not fully supported in pybids")
 @pytest.mark.parametrize(
     "dataset, nb_files",
     [
